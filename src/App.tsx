@@ -3,7 +3,7 @@ import {
   Clock, Brain, Users, AlertTriangle, Phone, MessageSquare, Mail, Activity,
   HelpCircle, Play, RotateCcw, ChevronRight, X, Terminal, Search, Radio,
   Wrench, ShieldAlert, Coffee, UserPlus, Zap, Volume2, VolumeX, Keyboard,
-  Key, Globe, Trophy, BookOpen, Lock, Server,
+  Key, Globe, Trophy, BookOpen, Lock, Server, Copy, Check,
 } from "lucide-react";
 
 /* ============================================================================
@@ -126,13 +126,17 @@ const SCENARIOS = {
         id: "coffee", cat: "act", icon: "coffee",
         label: "Pour a coffee", hint: "Restore focus. Costs a bit of time.",
         t: 2, f: -20,
-        out: { k: "narrative", lines: ["Hot water, grounds, inhale. The fog lifts a little.", "(focus restored)"] },
+        out: { k: "narrative", lines: ["Hot water, grounds, inhale. The fog lifts a little.", "Somewhere, a customer is typing 'is it back yet'. They have typed this eleven times.", "(focus restored)"] },
       },
     ],
     ambient: [
+      { at: 4, line: "A dad just called in because his Ring doorbell is 'recording but not streaming.' He is watching a raccoon." },
       { at: 6, line: "Tier 1: '12 tickets now. Meridian's CIO is on hold.'" },
-      { at: 12, line: "Slack #incidents has 19 people in it. Someone is asking about the runbook." },
+      { at: 10, line: "A 14-year-old called in. He is the only person on his Apex squad with a working connection. He considers this 'a loss'." },
+      { at: 12, line: "Slack #incidents has 19 people in it. Someone is asking about the runbook. Nobody has read the runbook." },
+      { at: 16, line: "A wedding photographer is trying to upload 4,800 RAW files 'by sunrise.' The wedding was in March." },
       { at: 20, line: "Twitter: @meridian_health retweeted 'is your internet working?' Tier 1 is screenshotting." },
+      { at: 26, line: "The mayor's aide is 'just checking in' via email. The email has 11 exclamation points." },
     ],
     intr: [
       {
@@ -154,6 +158,26 @@ const SCENARIOS = {
           { label: "Take the call yourself", eff: { t: 4, cred: 10 }, resp: "Three minutes of reassurance. He exhales. Says their failover is working but barely." },
           { label: "Have Tier 1 read a canned update", eff: { t: 1, cred: 0 }, resp: "Tier 1 relays the status. It lands OK." },
           { label: "Escalate to the VP so they can handle it", eff: { t: 1, cred: -5 }, resp: "VP is displeased. But the hospital gets a call." },
+        ],
+      },
+      {
+        id: "small_biz", at: 14, icon: "phone",
+        title: "Small-business owner. Call escalated to you.",
+        body: '"Listen — you people. My POS system is down. My POS system. I have an EMPANADA TRUCK. Do you understand what that MEANS. The people want empanadas AT 3 AM and I CAN\'T CHARGE THEM."',
+        choices: [
+          { label: "'Ma\\'am, take cash. We\\'re on it — fiber\\'s cut.'", eff: { t: 1, cred: 5 }, resp: "'Cash. CASH. It\\'s 2026. Who carries CASH.' (you do not have a good answer for this.)" },
+          { label: "Offer her a future service credit.", eff: { t: 2, cred: 5 }, resp: "'Fine. ONE free month. And I want it in EMPANADAS equivalent. You do the math.'" },
+          { label: "'We\\'re working on it, ma\\'am.'", eff: { t: 0, cred: -5 }, resp: "Four more ticket escalations from her arrive in the next two minutes. All in caps." },
+        ],
+      },
+      {
+        id: "local_news", at: 24, icon: "alert",
+        title: "PR is slacking you.",
+        body: '"Channel 7 just called. They want a comment on the \'mass internet outage.\' It\'s 23 customers. Someone\'s cousin works there. Please give me ONE sentence I can give them."',
+        choices: [
+          { label: "'Fiber cut from nearby construction. Restoration in progress.'", eff: { t: 1, cred: 10 }, resp: "PR: 'Perfect. Boring. Love it. Going with that.'" },
+          { label: "'We are aware of the issue.'", eff: { t: 0, cred: 0 }, resp: "PR: 'That\\'s seven words of nothing. They\\'re going to imply we\\'re hiding something.'" },
+          { label: "'Tell them to call the backhoe.'", eff: { t: 0, cred: -10 }, resp: "PR, sighing: 'I cannot say that on air. But I love you for it.' They say it on air." },
         ],
       },
     ],
@@ -267,13 +291,17 @@ const SCENARIOS = {
         id: "coffee", cat: "act", icon: "coffee",
         label: "Pour a coffee", hint: "Restore focus.",
         t: 2, f: -20,
-        out: { k: "narrative", lines: ["The smell alone helps. Then the caffeine.", "(focus restored)"] },
+        out: { k: "narrative", lines: ["The smell alone helps. Then the caffeine.", "Your phone buzzes six times during the pour. You do not look at it.", "(focus restored)"] },
       },
     ],
     ambient: [
+      { at: 3, line: "Tier 1: 'Someone just called in screaming the word \\'jitter\\' like it was a slur.'" },
       { at: 5, line: "Tier 1: 'Trading desk at Northridge Capital says they are, quote, \\'losing money by the second\\'.'" },
+      { at: 8, line: "A Twitch streamer with 14 viewers is ragequitting live: 'THE ISP IS STEALING MY DUBS.' It's being clipped." },
       { at: 11, line: "A peer's public looking glass shows your prefixes flickering on their side too." },
+      { at: 14, line: "r/sysadmin has a thread titled 'anyone else just watching everything flap right now.' 340 comments already." },
       { at: 18, line: "#incidents: 'anyone else seeing this?' — yeah. Everyone who uses this carrier." },
+      { at: 22, line: "A customer is demanding to know why our status page is 'all green.' It is not. They are looking at their thermostat app." },
     ],
     intr: [
       {
@@ -304,6 +332,26 @@ const SCENARIOS = {
           { label: "Realistic ETA (after calling the carrier)", eff: { t: 3, cred: 10 }, resp: "They're unhappy, but they respect the straight answer." },
           { label: "Stall: 'investigating, updates soon'", eff: { t: 1, cred: -5 }, resp: "They hang up. They will call back." },
           { label: "Offer to proactively reroute them", eff: { t: 2, cred: 5 }, resp: "They appreciate it. You'd better actually do it." },
+        ],
+      },
+      {
+        id: "crypto_bro", at: 9, icon: "phone",
+        title: "A man is screaming. The man is a customer.",
+        body: '"MY POSITION. IS LIQUIDATING. I AM DOWN FOUR HUNDRED THOUSAND. DO YOU UNDERSTAND. YOUR INTERNET. IS ROBBING ME."',
+        choices: [
+          { label: "'Sir — it\\'s intermittent. Move to mobile hotspot while we fix it.'", eff: { t: 1, cred: 5 }, resp: "'I\\'m ON my hotspot. YOUR hotspot. It is ALSO your internet. EVERYTHING is your internet!!' (it is not)" },
+          { label: "'We\\'re aware and working on it.'", eff: { t: 1, cred: -5 }, resp: "He will be back in 90 seconds, angrier, and with a slightly different dollar figure." },
+          { label: "Mute him and keep working", eff: { t: 0, cred: -10 }, resp: "Tier 1 DMs: 'he just called back. and again. and again. he thinks we hung up on him on purpose. (we did.)'" },
+        ],
+      },
+      {
+        id: "yelp_threat", at: 20, icon: "alert",
+        title: "Tier 1, weary: 'We\\'ve got a Karen.'",
+        body: '"She says she\'s going to, quote, \'leave a Yelp review so bad your mother will see it.\' She also wants to know what \'jitter\' is because her \'son-in-law who works in tech\' used the word. He is an accountant."',
+        choices: [
+          { label: "Have Tier 1 explain jitter in plain English.", eff: { t: 1, cred: 5 }, resp: "Tier 1 does a remarkable impression of patience. The customer says 'oh. OH. OK.' and hangs up without a goodbye." },
+          { label: "'Offer her a service credit and move on.'", eff: { t: 1, cred: 0 }, resp: "She accepts the credit AND writes the Yelp review. It is in all caps. It mentions the word 'jitter' twice." },
+          { label: "Ignore it.", eff: { t: 0, cred: -5 }, resp: "She leaves the review anyway. Your mother does not see it. Her mother does." },
         ],
       },
     ],
@@ -425,13 +473,17 @@ const SCENARIOS = {
         id: "coffee", cat: "act", icon: "coffee",
         label: "Pour a coffee", hint: "Restore focus.",
         t: 2, f: -20,
-        out: { k: "narrative", lines: ["Bitter. Hot. Necessary.", "(focus restored)"] },
+        out: { k: "narrative", lines: ["Bitter. Hot. Necessary.", "Kevin calls while you are pouring. You let it ring. You deserve this.", "(focus restored)"] },
       },
     ],
     ambient: [
+      { at: 3, line: "Account manager: 'Kevin is typing. Then deleting. Then typing. He\\'s composing something.'" },
       { at: 4, line: "Slack DM from your manager: 'I'm watching this one. Loop me in when you have something.'" },
+      { at: 7, line: "Kevin: 'hello??? is anyone ON the case??? we are a PAYING CUSTOMER???'" },
       { at: 9, line: "Account manager in #northridge-war-room: 'Kevin is... emotional. Anything I can relay?'" },
+      { at: 12, line: "Kevin just left a one-star Google review with the words 'criminal, honestly.' Our ratings team is in a meeting about it already." },
       { at: 15, line: "Kevin just tweeted about 'our ISP' from his personal account. It's not complimentary. It is misspelled." },
+      { at: 18, line: "Kevin's LinkedIn status: 'Looking to connect with any ISP lawyers. For a friend. Not me. For a friend.'" },
     ],
     intr: [
       {
@@ -461,6 +513,16 @@ const SCENARIOS = {
         choices: [
           { label: "Walk through the evidence trail", eff: { t: 2, cred: 10 }, resp: '"Solid work. Keep the customer looped in."' },
           { label: "Say you're being thorough, no conclusions yet", eff: { t: 1, cred: -5 }, resp: '"Thorough is good. Faster is better. Update me in 10."' },
+        ],
+      },
+      {
+        id: "kevin_wife", at: 17, icon: "phone",
+        title: "Kevin, but somehow louder.",
+        body: '"OK my WIFE just made a very good point. She said: \'Kevin. Ask them if it\'s because you changed the WiFi password.\' I changed the WiFi password three weeks ago. COULD that be related. Be honest."',
+        choices: [
+          { label: "'No, Kevin. No, it could not.'", eff: { t: 1, cred: 5 }, resp: "'She is going to be SO wrong. I am SO excited to tell her.'" },
+          { label: "'Kevin — this is a firewall rule, not WiFi.'", eff: { t: 2, cred: 10 }, resp: "'So you\\'re saying this WOULD have worked if I hadn\\'t changed the password. Got it.' (he did not get it.)" },
+          { label: "Lie: 'Yes — actually, change it back.'", eff: { t: 0, cred: -20 }, resp: "Kevin changes the WiFi password again. The entire Northridge office gets kicked off WiFi. Now there are TWO outages." },
         ],
       },
     ],
@@ -627,15 +689,29 @@ const SCENARIOS = {
         id: "coffee", cat: "act", icon: "coffee",
         label: "Pour a coffee", hint: "You deserve this.",
         t: 2, f: -20,
-        out: { k: "narrative", lines: ["Cream. Sugar. A resigned sigh.", "(focus restored)"] },
+        out: { k: "narrative", lines: ["Cream. Sugar. A resigned sigh.", "Your phone shows 'KEVIN (17 missed)'. You do not look at it. You sip.", "(focus restored)"] },
       },
     ],
     ambient: [
+      { at: 3, line: "Kevin texted: 'are u there??? HELLO?????' (you replied 4 seconds ago)" },
       { at: 4, line: "Slack DM from your manager: 'Is this Kevin again.'" },
-      { at: 8, line: "Kevin just tweeted: 'our ISP is INCOMPETENT also has anyone heard of DNS'. 4 likes." },
+      { at: 6, line: "Kevin: 'btw we pay you people $189 A MONTH. just so ur aware.'" },
+      { at: 8, line: "Kevin just tweeted: 'our ISP is INCOMPETENT also has anyone heard of DNS'. 4 likes. Two are bots." },
+      { at: 11, line: "Kevin has opened a BBB complaint. You are CC'd. The subject line is 'COMPLETE INCOMPATENCE' (his spelling)." },
       { at: 12, line: "Tier 1: 'Kevin\\'s CEO is now calling Kevin. Kevin is not answering Kevin\\'s CEO.'" },
+      { at: 15, line: "Kevin: 'i am filming this for my nephew he said he wants to see'" },
     ],
     intr: [
+      {
+        id: "kevin_nephew", at: 3, icon: "phone",
+        title: "Kevin is already back. Thirty-two seconds.",
+        body: '"OK so my nephew — 14, very smart, already runs a Minecraft server — he just said it\'s \'probably DNS\'. What is your take on that. Professionally."',
+        choices: [
+          { label: "'Kevin, DNS has nothing to do with what you\\'re describing.'", eff: { t: 1, cred: 5 }, resp: "'OK but just so we\\'re on the same page, my NEPHEW, fourteen, already caught something YOU missed.'" },
+          { label: "'Let me look into that.'", eff: { t: 0, cred: -5 }, resp: '"GREAT. He\'s going to be THRILLED. I\'m texting him now."' },
+          { label: "'Please put your nephew on the phone.'", eff: { t: 2, cred: 5 }, resp: "Silence. Then: 'He\\'s at school.' It is 2:51 AM." },
+        ],
+      },
       {
         id: "kevin_5g", at: 5, icon: "phone",
         title: "Kevin has a new theory.",
@@ -644,6 +720,16 @@ const SCENARIOS = {
           { label: "Patient: 'Kevin, 5G is a phone thing. Not your office.'", eff: { t: 1, cred: 5 }, resp: "'...OK. But can you still turn it off? As a favor. For me.'" },
           { label: "'Kevin, I cannot turn off 5G.'", eff: { t: 0, cred: 0 }, resp: '"Can I talk to your manager about that."' },
           { label: "Agree: 'Sure, turning off the 5G now.'", eff: { t: 0, cred: -15 }, resp: "Kevin tells the whole office you turned off the 5G. The whole office is now asking when their WiFi will come back on." },
+        ],
+      },
+      {
+        id: "kevin_recording", at: 8, icon: "alert",
+        title: "Kevin, suddenly calmer. Suspiciously calmer.",
+        body: '"Just so you know, I AM recording this call. For my lawyer. Who is also my brother. Who is a dentist. But still a lawyer, because he took a class."',
+        choices: [
+          { label: "'Kevin, you\\'re welcome to record. Let\\'s keep going.'", eff: { t: 1, cred: 5 }, resp: "'OK good. Because he\\'s going to WATCH this. Eventually. After his root canal schedule clears.'" },
+          { label: "'A dentist is not a lawyer, Kevin.'", eff: { t: 2, cred: 0 }, resp: "'He has a FRAMED DEGREE. On his WALL. So.'" },
+          { label: "Hang up and call him back.", eff: { t: 3, cred: -10 }, resp: "He picks up on ring one. 'Did you just HANG UP on me. I have that on tape now too.'" },
         ],
       },
       {
@@ -665,6 +751,16 @@ const SCENARIOS = {
           { label: "'We\\'re still investigating.'", eff: { t: 1, cred: -5 }, resp: "Marta quits. Somehow this is your fault now." },
         ],
       },
+      {
+        id: "kevin_ceo", at: 17, icon: "phone",
+        title: "Unknown number. You answer anyway. You shouldn't have.",
+        body: '"Hi — this is Douglas, I\'m Kevin\'s CEO. Kevin tells me you\'ve \'broken the cloud\' and there is, quote, \'a DNS.\' Could you help me understand what a DNS is, in plain English, for me, the CEO."',
+        choices: [
+          { label: "'Douglas, respectfully — Kevin unplugged the router.'", eff: { t: 2, cred: 15 }, resp: "Long silence. 'I see. I will speak to Kevin.' You hear a door close, very firmly, in the background." },
+          { label: "'It\\'s a little complicated, Douglas.'", eff: { t: 2, cred: -5 }, resp: "'Well — try me. I played BASE-ball in college. I can follow a CURVE-ball.'" },
+          { label: "'Kevin is lying to you, Douglas.'", eff: { t: 1, cred: -5 }, resp: "'That\\'s a strong word. I\\'m going to need it in writing. With letterhead.'" },
+        ],
+      },
     ],
     diag: [
       { id: "user_side", label: "Kevin's router is unplugged (nothing is actually wrong)" },
@@ -675,6 +771,30 @@ const SCENARIOS = {
     ],
   },
 };
+
+// ============ RAGE QUEUE POOL ============
+// A pool of angry "callers" who join the queue during an incident.
+// Each has a short hook — a theory, a complaint, or a threat. They drain
+// credibility over time if ignored; reassuring them costs a minute but buys
+// credibility back; hanging up is free but expensive in reputation.
+const RAGE_POOL = [
+  { nm: "Barbara",       th: "demands you 'turn off the 5G.' All of it." },
+  { nm: "Dennis (ranked apex)", th: "will 'remember this' come performance review. He does not work for you." },
+  { nm: "Margaret",      th: "is composing a Yelp review live. It has already said 'criminal.'" },
+  { nm: "Raj (trading desk)", th: "claims losses 'by the second.' Will not define 'by.'" },
+  { nm: "Tim (wedding)", th: "needs to upload 4,800 RAW files 'before sunrise.'" },
+  { nm: "Lauren",        th: "is watching a raccoon on her Ring doorbell. It is, quote, 'the story of her life.'" },
+  { nm: "Chad",          th: "says his 'nephew in IT' has confirmed it's DNS." },
+  { nm: "Priya",         th: "said 'lawyers' inside the first twenty seconds." },
+  { nm: "Doug",          th: "is recording this 'for evidence.' You can hear his hold music in his echo." },
+  { nm: "Cheryl",        th: "thinks it's 'the weather.' It is, in fact, not raining." },
+  { nm: "Marcus",        th: "pays 'A LOT of money.' Account shows $42/mo." },
+  { nm: "Hiromi",        th: "has said 'escalate this' seven consecutive times." },
+  { nm: "Blake (twitch)", th: "is streaming this call to 14 viewers. Eight left." },
+  { nm: "Ellen",         th: "keeps saying 'my time is valuable.' Nobody asked." },
+  { nm: "Stan",          th: "thinks the issue is Mercury in retrograde. And 'also maybe fiber.'" },
+  { nm: "Janet",         th: "insists she can 'smell' when the internet is slow." },
+];
 
 // ============ ICON MAP ============
 const ICONS = {
@@ -711,7 +831,7 @@ function useSound() {
   const ensure = () => {
     if (!ctxRef.current) {
       try {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
+        const Ctx = window.AudioContext || (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
         if (Ctx) ctxRef.current = new Ctx();
       } catch { /* no audio — fine */ }
     }
@@ -863,8 +983,8 @@ const EVID_CATS = [
   { key: "symptoms", label: "Symptoms", hint: "What are you actually seeing?" },
 ];
 
-function EvidenceBoard({ evid }) {
-  const total = Object.values(evid).reduce((a, b) => a + b.length, 0);
+function EvidenceBoard({ evid }: any) {
+  const total: number = Object.values(evid).reduce<number>((a, b: any) => a + b.length, 0);
   const filledCats = EVID_CATS.filter(c => (evid[c.key] || []).length > 0).length;
   const hypothesisForming = total >= 3 && filledCats >= 2;
   return (
@@ -898,6 +1018,56 @@ function EvidenceBoard({ evid }) {
       {hypothesisForming && (
         <div className="mt-3 pt-3 border-t border-zinc-800 text-[11px] text-amber-400/90 italic leading-relaxed">
           A picture is starting to form. Cross-reference timing with the last known changes before you commit.
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ============ RAGE QUEUE SIDEBAR ============
+function RageQueue({ customers, patienceOf, onCalm, onDismiss }) {
+  return (
+    <div className="bg-zinc-900 border border-red-900/40 rounded-md p-4">
+      <div className="flex items-center justify-between mb-3">
+        <div className="text-xs text-red-400 tracking-widest">// ANGRY CUSTOMERS</div>
+        <div className="text-[10px] text-zinc-600">{customers.length} on the line</div>
+      </div>
+      {customers.length === 0 ? (
+        <div className="text-xs text-zinc-600 italic pl-1">Silence. Enjoy it while it lasts.</div>
+      ) : (
+        <div className="space-y-2">
+          {customers.map(c => {
+            const p = patienceOf(c);
+            const barColor = p < 30 ? "bg-red-500" : p < 60 ? "bg-amber-500" : "bg-green-500";
+            return (
+              <div key={c.id} className="bg-zinc-950 border border-zinc-800 rounded p-2">
+                <div className="flex items-center justify-between mb-1 gap-2">
+                  <div className="text-xs text-zinc-200 font-medium truncate">{c.nm}</div>
+                  <div className={`text-[10px] ${p < 30 ? "text-red-400" : "text-zinc-500"}`}>{Math.round(p)}%</div>
+                </div>
+                <div className="text-[11px] text-zinc-400 italic mb-2 leading-snug">{c.th}</div>
+                <div className="w-full h-1 bg-zinc-800 rounded-full overflow-hidden mb-2">
+                  <div className={`h-full transition-all ${barColor}`} style={{ width: `${p}%` }}/>
+                </div>
+                <div className="flex gap-1.5">
+                  <button
+                    onClick={() => onCalm(c.id)}
+                    className="flex-1 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-green-700/50 rounded px-2 py-1 text-[10px] text-zinc-200 transition"
+                    title="Spend 2 minutes reassuring them. +6 cred."
+                  >
+                    Reassure (-2m)
+                  </button>
+                  <button
+                    onClick={() => onDismiss(c.id)}
+                    className="flex-1 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 hover:border-red-700/50 rounded px-2 py-1 text-[10px] text-red-400 transition"
+                    title="Free, but they'll remember. -8 cred."
+                  >
+                    Hang up
+                  </button>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
     </div>
@@ -1004,9 +1174,41 @@ function Interrupt({ intr, onChoose }) {
 // ============ DIAGNOSIS MODAL ============
 function Diagnose({ sc, onCommit, onCancel, evidCount }) {
   const [sel, setSel] = useState(null);
+
+  // Keyboard nav inside the modal:
+  //  - digits 1-N pick an option
+  //  - Enter / Return commits (when a selection exists)
+  //  - D also closes the modal (so the same hotkey that opened it can close it)
+  useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "Enter") {
+        if (sel) { e.preventDefault(); onCommit(sel); }
+        return;
+      }
+      if (e.key === "d" || e.key === "D") {
+        e.preventDefault();
+        onCancel();
+        return;
+      }
+      const n = parseInt(e.key, 10);
+      if (!isNaN(n) && n >= 1 && n <= sc.diag.length) {
+        e.preventDefault();
+        setSel(sc.diag[n - 1].id);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [sel, sc.diag, onCommit, onCancel]);
+
   return (
-    <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-4 z-50 backdrop-blur-sm">
-      <div className="bg-zinc-900 border border-green-600/50 rounded-md max-w-xl w-full p-5 shadow-2xl">
+    <div
+      className="fixed inset-0 bg-black/85 flex items-center justify-center p-4 z-50 backdrop-blur-sm"
+      onClick={onCancel}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        className="bg-zinc-900 border border-green-600/50 rounded-md max-w-xl w-full p-5 shadow-2xl"
+      >
         <div className="flex items-center justify-between mb-3">
           <div className="text-xs text-green-400 tracking-widest uppercase">// Commit Root Cause</div>
           <button onClick={onCancel} className="text-zinc-500 hover:text-zinc-300"><X className="w-4 h-4"/></button>
@@ -1016,17 +1218,22 @@ function Diagnose({ sc, onCommit, onCancel, evidCount }) {
           {evidCount < 4 && <div className="text-amber-400 text-xs mt-2">⚠ Only {evidCount} pieces of evidence gathered — committing early is risky.</div>}
         </div>
         <div className="space-y-2 mb-5">
-          {sc.diag.map(d => (
+          {sc.diag.map((d, i) => (
             <button
               key={d.id}
               onClick={() => setSel(d.id)}
-              className={`w-full text-left rounded px-3 py-2.5 transition text-sm border ${sel === d.id ? "bg-green-900/40 border-green-500 text-zinc-100" : "bg-zinc-800 border-zinc-700 hover:border-zinc-600 text-zinc-300"}`}
+              onDoubleClick={() => onCommit(d.id)}
+              className={`w-full text-left rounded px-3 py-2.5 transition text-sm border flex items-center justify-between gap-3 ${sel === d.id ? "bg-green-900/40 border-green-500 text-zinc-100" : "bg-zinc-800 border-zinc-700 hover:border-zinc-600 text-zinc-300"}`}
             >
-              {d.label}
+              <span>{d.label}</span>
+              <kbd className="text-[10px] text-zinc-500 bg-zinc-950 border border-zinc-800 rounded px-1.5 py-0.5 font-mono flex-shrink-0">{i + 1}</kbd>
             </button>
           ))}
         </div>
-        <div className="flex gap-2 justify-end">
+        <div className="flex items-center gap-2 justify-end">
+          <div className="text-[10px] text-zinc-600 mr-auto italic">
+            <kbd className="px-1 py-0.5 bg-zinc-950 border border-zinc-800 rounded text-[10px]">1-{sc.diag.length}</kbd> pick · <kbd className="px-1 py-0.5 bg-zinc-950 border border-zinc-800 rounded text-[10px]">Enter</kbd> commit · <kbd className="px-1 py-0.5 bg-zinc-950 border border-zinc-800 rounded text-[10px]">Esc</kbd> close
+          </div>
           <button onClick={onCancel} className="text-sm text-zinc-400 hover:text-zinc-200 px-3 py-2">Keep investigating</button>
           <button
             onClick={() => sel && onCommit(sel)}
@@ -1045,11 +1252,12 @@ function Diagnose({ sc, onCommit, onCancel, evidCount }) {
 function HelpOverlay({ onClose }) {
   const rows = [
     ["1 – 9", "Trigger corresponding available action"],
-    ["D", "Open Commit Diagnosis dialog"],
+    ["D", "Open / close the Commit Diagnosis dialog"],
     ["C", "Pour a coffee (if available)"],
     ["M", "Mute / unmute sound"],
     ["?", "Toggle this help"],
     ["Esc", "Close dialogs"],
+    ["1-N · Enter", "(inside Diagnose) pick option + commit"],
   ];
   return (
     <div className="fixed inset-0 bg-black/85 flex items-center justify-center p-4 z-50 backdrop-blur-sm" onClick={onClose}>
@@ -1092,6 +1300,9 @@ function Game({ scKey, onEnd, sound, crt }) {
   const [openerDone, setOpenerDone] = useState(false);
   const [worseTriggered, setWorseTriggered] = useState(false);
   const [restored, setRestored] = useState(false);
+  // Rage queue — live list of angry customers on the line
+  const [customers, setCustomers] = useState([]);
+  const [nextSpawnAt, setNextSpawnAt] = useState(() => 2 + Math.floor(Math.random() * 3));
   const endedRef = useRef(false);
   const logRef = useRef(null);
 
@@ -1110,8 +1321,89 @@ function Game({ scKey, onEnd, sound, crt }) {
 
   const addLog = (entries) => setLog(l => [...l, ...entries]);
 
+  // ----- RAGE QUEUE -----
+  // Patience decays at ~10/min per customer. If it hits zero they hang up
+  // furious — credibility takes a serious hit.
+  const patienceOf = (c) => Math.max(0, 100 - (elapsed - c.joinedAt) * 10);
+
+  // Auto-leave: when elapsed advances past a customer's patience window, they
+  // bail. Fires on any elapsed change.
+  useEffect(() => {
+    if (!openerDone) return;
+    setCustomers(cs => {
+      const left = cs.filter(c => elapsed - c.joinedAt >= 10);
+      if (left.length === 0) return cs;
+      const hit = left.length * 12;
+      setCred(cr => clamp(cr - hit, 0, 100));
+      addLog(left.map(c => ({
+        k: "ambient",
+        text: `${c.nm} hung up. ${c.nm} is composing an email to your CEO. (-12 cred)`,
+      })));
+      sound.beep(150, 220, 0.07);
+      return cs.filter(c => elapsed - c.joinedAt < 10);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elapsed, openerDone]);
+
+  // Spawn new customers as elapsed advances past nextSpawnAt.
+  useEffect(() => {
+    if (!openerDone) return;
+    if (elapsed < nextSpawnAt) return;
+    if (customers.length >= 4) return;
+    const pool = RAGE_POOL.filter(p => !customers.some(c => c.nm === p.nm));
+    if (pool.length === 0) return;
+    const pick = pool[Math.floor(Math.random() * pool.length)];
+    const id = `c-${elapsed}-${Math.random().toString(36).slice(2, 7)}`;
+    setCustomers(cs => [...cs, { id, nm: pick.nm, th: pick.th, joinedAt: elapsed }]);
+    setNextSpawnAt(elapsed + 3 + Math.floor(Math.random() * 4));
+    addLog([{ k: "ambient", text: `${pick.nm} just joined the queue: ${pick.th}` }]);
+    sound.beep(420, 55, 0.045);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [elapsed, nextSpawnAt, openerDone]);
+
+  const calmCustomer = (id) => {
+    const c = customers.find(x => x.id === id);
+    if (!c) return;
+    setCustomers(cs => cs.filter(x => x.id !== id));
+    setSla(s => s - 2);
+    setCred(cr => clamp(cr + 6, 0, 100));
+    const newElapsed = elapsed + 2;
+    setElapsed(newElapsed);
+    addLog([{ k: "ambient", text: `Reassured ${c.nm}. They agreed to 'think about it.' (+6 cred, -2m)` }]);
+    sound.beep(680, 60, 0.04);
+  };
+
+  const dismissCustomer = (id) => {
+    const c = customers.find(x => x.id === id);
+    if (!c) return;
+    setCustomers(cs => cs.filter(x => x.id !== id));
+    setCred(cr => clamp(cr - 8, 0, 100));
+    addLog([{ k: "ambient", text: `Sent ${c.nm} to hold music. ${c.nm} did not appreciate it. (-8 cred)` }]);
+    sound.beep(200, 70, 0.04);
+  };
+
+  // Shuffle interrupt content across its own time slots for each new run.
+  // Interrupts marked `anchor: true` keep their original timing (plot beats).
+  // Everyone else gets randomly reassigned across the remaining slots, so the
+  // same scenario feels different on replay — new Kevin theories, new order.
+  const scheduledIntrs = useMemo(() => {
+    const all = [...(sc.intr || [])];
+    const anchors = all.filter(i => i.anchor);
+    const pool = all.filter(i => !i.anchor);
+    const anchorAts = new Set(anchors.map(a => a.at));
+    const openSlots = all.map(i => i.at).filter(a => !anchorAts.has(a));
+    // Fisher-Yates shuffle the pool
+    for (let i = pool.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [pool[i], pool[j]] = [pool[j], pool[i]];
+    }
+    const rescheduled = pool.map((intr, i) => ({ ...intr, at: openSlots[i] ?? intr.at }));
+    return [...anchors, ...rescheduled].sort((a, b) => a.at - b.at);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scKey]);
+
   const checkInterrupt = (newElapsed) => {
-    for (const intr of sc.intr) {
+    for (const intr of scheduledIntrs) {
       if (!doneIntrs.has(intr.id) && newElapsed >= intr.at) {
         setCurIntr(intr);
         setDoneIntrs(s => new Set([...s, intr.id]));
@@ -1148,7 +1440,7 @@ function Game({ scKey, onEnd, sound, crt }) {
     const focusPenalty = focus < 30 ? 1 : 0;
     const tCost = a.t + focusPenalty;
 
-    const entries = [{ k: "action", label: a.label, t: tCost }];
+    const entries: any[] = [{ k: "action", label: a.label, t: tCost }];
     if (focusPenalty > 0) {
       entries.push({ k: "system", text: "low focus — that took a minute longer than it should have" });
     }
@@ -1207,8 +1499,17 @@ function Game({ scKey, onEnd, sound, crt }) {
     setShowDiag(false);
     const correct = diagId === sc.correct;
     const slaLeft = sla;
+    // Firing criteria — any of these and HR calls you in the morning:
+    //   - You made it worse AND also got the diagnosis wrong
+    //   - Your credibility collapsed below 20
+    //   - You made it worse AND blew the SLA by 10+ minutes
+    const fired =
+      (worseTriggered && !correct) ||
+      cred < 20 ||
+      (worseTriggered && slaLeft <= -10);
     let outcome;
-    if (worseTriggered) outcome = "worse";
+    if (fired) outcome = "fired";
+    else if (worseTriggered) outcome = "worse";
     else if (correct && slaLeft > 5 && cred > 60) outcome = "clean";
     else if (correct && slaLeft >= 0) outcome = "squeaker";
     else if (!correct && restored) outcome = "wrong_fix";
@@ -1252,14 +1553,16 @@ function Game({ scKey, onEnd, sound, crt }) {
       const optimalHit = (sc.optimal || []).filter(id => doneActs.has(id)).length;
       const optimalTotal = (sc.optimal || []).length || 1;
       const score = Math.max(0, Math.round((cred / 100) * 15) + Math.min(10, evidCount * 2));
+      // Breach + trashed credibility or a secondary outage = you're fired, not just breached
+      const fired = cred < 20 || (worseTriggered && sla <= -10);
       onEnd({
-        outcome: "breach", scKey, diagId: null, correct: false,
+        outcome: fired ? "fired" : "breach", scKey, diagId: null, correct: false,
         slaLeft: sla, cred, focus, evidCount, score,
         achievements: [], optimalHit, optimalTotal,
         doneActIds: [...doneActs],
       });
     }
-  }, [sla, curIntr, openerDone, scKey, cred, focus, evid, doneActs, onEnd, sc.optimal]);
+  }, [sla, curIntr, openerDone, scKey, cred, focus, evid, doneActs, onEnd, sc.optimal, worseTriggered]);
 
   // Available actions in a stable order
   const avail = useMemo(() => sc.acts.filter(a => {
@@ -1448,11 +1751,17 @@ function Game({ scKey, onEnd, sound, crt }) {
           </div>
         </div>
 
-        {/* Evidence board */}
-        <div className="md:sticky md:top-[74px] md:self-start">
+        {/* Evidence board + rage queue */}
+        <div className="md:sticky md:top-[74px] md:self-start space-y-4">
           <EvidenceBoard evid={evid}/>
-          <div className="text-[10px] text-zinc-600 mt-3 italic leading-relaxed">
-            Evidence fills in as you investigate. Use it to narrow down the root cause before you commit.
+          <RageQueue
+            customers={customers}
+            patienceOf={patienceOf}
+            onCalm={calmCustomer}
+            onDismiss={dismissCustomer}
+          />
+          <div className="text-[10px] text-zinc-600 italic leading-relaxed">
+            Evidence fills in as you investigate. Angry customers drain credibility — calm them down or cut them loose.
           </div>
         </div>
       </div>
@@ -1504,13 +1813,79 @@ const ENDINGS = {
     bg: "bg-red-950/30",
     tag: "Your fix caused a second outage. Post-mortem is going to be a reading.",
   },
+  fired: {
+    title: "YOU'RE FIRED",
+    color: "text-red-300",
+    border: "border-red-700/70",
+    bg: "bg-red-950/40",
+    tag: "HR wants a word. It is a short word. It starts with 'B'.",
+  },
 };
+
+// ============ POST-MORTEM GENERATOR ============
+// Produces a shareable markdown post-mortem from the run — blameless tone,
+// quotes the player's actual actions. Handy for bragging or for confessing.
+function buildPostMortem(result, sc) {
+  const end = ENDINGS[result.outcome];
+  const yourDiag = sc.diag.find(d => d.id === result.diagId);
+  const correctDiag = sc.diag.find(d => d.id === sc.correct);
+  const actions = (result.doneActIds || [])
+    .map(id => sc.acts.find(a => a.id === id))
+    .filter(Boolean);
+
+  const outcomeNarrative = {
+    clean: "Resolved cleanly, well within SLA. Nobody ever knows.",
+    squeaker: "Resolved correctly, but cut uncomfortably close to the SLA.",
+    wrong_fix: "Service was restored, but the root cause diagnosis was incorrect. The fix held — for the wrong reasons.",
+    wrong: "Incorrect root cause committed. Service impact extended.",
+    breach: "SLA breached. Customer-facing impact extended past the contractual window.",
+    worse: "Operator action during the incident caused a secondary outage, compounding customer impact.",
+    fired: "Operator has been relieved of their on-call responsibilities.",
+  }[result.outcome] || "Incident concluded.";
+
+  const lessons = [];
+  if (!result.correct) lessons.push("- Commit criteria needed more evidence across all four categories before cutover.");
+  if (result.slaLeft < 5) lessons.push("- Too many investigative cycles before a parallel-path containment was attempted.");
+  if ((result.optimalHit || 0) / (result.optimalTotal || 1) < 0.6) lessons.push("- Several high-signal investigative steps were skipped.");
+  if (result.cred < 60) lessons.push("- Customer-facing communications cadence drifted during the incident. Tighter updates next time.");
+  if (result.outcome === "worse") lessons.push("- Reversible-first: any mutating action during the incident should have been preceded by a dry-run.");
+  if (result.outcome === "fired") lessons.push("- Operator is encouraged to explore opportunities outside the on-call rotation.");
+  if (lessons.length === 0) lessons.push("- No systemic issues identified. Runbook captured as-is.");
+
+  const title = `# Post-Mortem: ${sc.title}`;
+  const meta = `**Outcome:** ${end.title}  \n**Score:** ${result.score ?? 0}  \n**Scenario difficulty:** ${sc.diff}  \n**SLA target:** ${sc.sla} min  \n**SLA remaining at resolution:** ${result.slaLeft} min  \n**Final credibility:** ${result.cred}/100`;
+  const summary = `## Summary\n${outcomeNarrative}`;
+  const diag = `## Root cause\n- **Diagnosed:** ${yourDiag ? yourDiag.label : "_no diagnosis committed (SLA breach)_"}\n- **Actual:** ${correctDiag.label}\n- **Correct?** ${result.correct ? "Yes" : "No"}`;
+  const backstory = `## What actually happened\n${sc.backstory}`;
+  const timeline = `## Actions taken (in order)\n${actions.length === 0 ? "_No investigative actions were recorded._" : actions.map((a, i) => `${i + 1}. ${a.label}`).join("\n")}`;
+  const evidence = `## Evidence gathered\n${result.evidCount} item${result.evidCount === 1 ? "" : "s"} across the investigation.`;
+  const lessonsBlock = `## Lessons learned\n${lessons.join("\n")}`;
+  const achievements = (result.achievements && result.achievements.length > 0)
+    ? `\n## Achievements unlocked\n${result.achievements.map(([n, d]) => `- **${n}** — ${d}`).join("\n")}`
+    : "";
+  const footer = `\n---\n_Generated by Escape the Outage. It's 2:47 AM somewhere._`;
+
+  return [title, meta, summary, diag, backstory, timeline, evidence, lessonsBlock + achievements, footer].join("\n\n");
+}
 
 function Ending({ result, onRestart, onTitle, crt }) {
   const sc = SCENARIOS[result.scKey];
   const end = ENDINGS[result.outcome];
   const correctDiag = sc.diag.find(d => d.id === sc.correct);
   const yourDiag = sc.diag.find(d => d.id === result.diagId);
+  const [copied, setCopied] = useState(false);
+
+  const copyPostMortem = async () => {
+    const md = buildPostMortem(result, sc);
+    try {
+      await navigator.clipboard.writeText(md);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2200);
+    } catch {
+      // Fallback: put it in a prompt so the user can still copy manually
+      window.prompt("Post-mortem (copy manually):", md);
+    }
+  };
 
   return (
     <div className={`min-h-screen bg-zinc-950 text-zinc-100 p-6 font-mono ${crt ? "crt" : ""}`}>
@@ -1608,12 +1983,20 @@ function Ending({ result, onRestart, onTitle, crt }) {
           </ol>
         </div>
 
-        <div className="flex gap-3">
-          <button onClick={onRestart} className="flex-1 bg-green-600 hover:bg-green-500 text-black font-semibold px-4 py-3 rounded transition flex items-center justify-center gap-2">
+        <div className="flex gap-3 flex-wrap">
+          <button onClick={onRestart} className="flex-1 min-w-[140px] bg-green-600 hover:bg-green-500 text-black font-semibold px-4 py-3 rounded transition flex items-center justify-center gap-2">
             <RotateCcw className="w-4 h-4"/> Run it back
           </button>
-          <button onClick={onTitle} className="flex-1 bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 px-4 py-3 rounded transition flex items-center justify-center gap-2">
+          <button onClick={onTitle} className="flex-1 min-w-[140px] bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200 px-4 py-3 rounded transition flex items-center justify-center gap-2">
             <Play className="w-4 h-4"/> Pick a scenario
+          </button>
+          <button
+            onClick={copyPostMortem}
+            className={`flex-1 min-w-[160px] px-4 py-3 rounded transition flex items-center justify-center gap-2 ${copied ? "bg-green-900/40 border border-green-600/60 text-green-300" : "bg-zinc-800 hover:bg-zinc-700 border border-zinc-700 text-zinc-200"}`}
+            title="Copy a blameless markdown post-mortem to your clipboard"
+          >
+            {copied ? <Check className="w-4 h-4"/> : <Copy className="w-4 h-4"/>}
+            {copied ? "Copied" : "Copy post-mortem"}
           </button>
         </div>
       </div>
